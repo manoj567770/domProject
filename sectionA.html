@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title></title>
+	<link rel="stylesheet" href="css/sectionA.css"/>
+</head>
+<body>
+
+	<button onclick="newEmployee()">New Employee</button>
+	<button onclick="showEmployees()">All Employees</button>
+	<button onclick="fullDump()">Full Dump</button>
+	<button onclick="partialDump()">Partial Dump</button>
+	<div id="employee"></div>
+	
+
+	<script>
+	const employees =	[{empcode:'A102', name:'James', age:37, gender:'Male', department:'Finance',
+							designation:'Manager',	salary:65000},
+						{empcode:'A106', name:'Mary', age:24, gender:'Female', department:'Technology',
+							designation:'Vice-President',	salary:68000},
+						{empcode:'A122', name:'Bob', age:23, gender:'Male', department:'Marketing',
+							designation:'Manager',	 salary:51000},
+						{empcode:'A088', name:'Julia', age:33, gender:'Female', department:'Finance', 
+							designation:'VicePresident',	salary:70000},	
+						{empcode:'A055', name:'Steve', age:27, gender:'Male', department:'Technology',
+							designation:'Manager',	salary:53000},	
+						{empcode:'A208', name:'Katherine', age:29, gender:'Female', department:'Marketing',
+							designation:'Manager',	salary:61000},
+						{empcode:'A181', name:'Edwards', age:31, gender:'Male', department:'Finance',
+							designation:'Trainee',	salary:49000},				
+						{empcode:'A029', name:'Margaret', age:32, gender:'Female', department:'Technology',
+							designation:'President',	salary:53000},
+						{empcode:'A029', name:'Bill', age:27, gender:'Male', department:'Operations',
+						designation:'Manager',	salary:58000}];
+
+
+						const dept = ['Finance','Technology','Marketing','Operations'];
+						const desgn = ['Manager','Vice-President','Trainee','President'];
+						const radio = ['Male','Female'];
+
+						function partialDump(){
+							const arr1 = employees.map(function(ele){
+							let str ='code='+ ele.empcode+',';
+							str+='name='+ ele.name+',';
+							str+= 'age='+ele.age+',';
+							return str + '</br>';
+						});
+							let html ='<table class=\'table1\'>'+arr1.join('')+'</table1>'+'</br>';
+							let element = document.getElementById('employee');
+								element.innerHTML = html;
+
+						}
+
+				function fullDump(){
+				const arr1 = employees.map(function(ele){
+				let str = ele.empcode+'::';
+				str+= ele.name+'::';
+				str+= ele.age+'::';
+				str+= ele.gender+'::';
+				str+= ele.department+'::'+'::';
+				str+= ele.designation+'::';
+				str+= ele.salary;
+				return str + '</br>';
+					});
+			let html ='<table class=\'table1\'>'+arr1.join('')+'</table1>'+'</br>';
+			let element = document.getElementById('employee');
+				element.innerHTML = html;
+
+						}
+
+						function showEmployees(){
+							showEmployees1(employees);
+						}
+
+			function newEmployee(){
+			let str = 'Employee Code :<input type="text" id="code"><br/><br/>';
+			str+= 'Name:<input type="text" id="name"><br/><br/>';
+			str+= 'Age:<input type="text" id="age"><br/><br/>';
+			str+='Gender' + makeRadios('',radio,'')+'<br/><br/>';
+			str+='Department' + makeDeptDD(dept,'Choose Department','') +'<br/><br/>';
+			str+='Designation' + makeDegnsDD(desgn,'Choose Designation','') +'<br/><br/>';
+			str+= 'Salary:<input type="text" id="sal"><br/><br/>';
+			str+= '<button onclick=\'addNewEmp()\'>Add New Employee</button>';
+			let div = document.getElementById('employee');
+			div.innerHTML = str;
+
+			}
+			function addNewEmp(){
+			let emp = {};
+			emp.empcode = document.getElementById('code').value;
+			emp.name = document.getElementById('name').value;
+			emp.age = document.getElementById('age').value;
+			emp.gender = document.getElementById('element').value;
+			emp.department = document.getElementById('dept').value;
+			emp.designation = document.getElementById('desgn').value;
+			emp.salary = document.getElementById('sal').value;
+			if(emp.empcode==''){
+				alert('please enter emp code');
+			}
+			
+			else if(emp.name==''){
+				alert('please enter emp name');
+			}
+			
+			else if(emp.age==''){
+				alert('please enter emp age');
+			}
+			
+			else if(emp.gender==''){
+				alert('please enter emp gender');
+			}
+			
+			else if(emp.department=='Choose Department'){
+				alert('please enter emp department');
+			}
+			
+			else if(emp.designation=='Choose Designation'){
+				alert('please enter emp designation');
+			}
+			
+			else if(emp.salary==''){
+				alert('please enter emp salary');
+			}
+			if(emp.empcode!='' && emp.name!='' && emp.age!='' && emp.gender!='' && emp.department!='Choose Department' && emp.designation!='Choose Designation' && emp.salary!=''){
+			employees.push(emp);
+			showEmployees1(employees);
+		}
+		}
+
+			function showEmployees1(arr){
+			const arr1 = arr.map(function(ele){
+				let str = '<tr>';
+				str+='<td class="td1">'+ele.empcode+'</td>';
+				str+='<td class="td1">'+ele.name+'</td>';
+				str+='<td class="td1">'+ele.age+'</td>';
+				str+='<td class="td1">'+ele.gender+'</td>';
+				str+='<td class="td1">'+ele.department+'</td>';
+				str+='<td class="td1">'+ele.designation+'</td>';
+				str+='<td class="td1">'+ele.salary+'</td>';
+				str+= '<td><button class=\'editBtn\' onclick=\'edit(\"'+ele.empcode+'")\'>Edit</button></td>';
+				str+='</tr>';
+				return str;
+			});
+			let header = '<tr>';
+			header+='<th class=\'th1\' onclick=\'sort(0)\'>Emp Code</th>';
+			header+='<th class=\'th1\' onclick=\'sort(1)\'>Name</th>';
+			header+='<th class=\'th1\' onclick=\'sort(2)\'>Age</th>';
+			header+='<th class=\'th1\' onclick=\'sort(3)\'>Gender</th>';
+			header+='<th class=\'th1\' onclick=\'sort(4)\'>Department</th>';
+			header+='<th class=\'th1\' onclick=\'sort(5)\'>Designation</th>';
+			header+='<th class=\'th1\' onclick=\'sort(6)\'>Salary</th>';
+			header+='<th class=th1></th>';
+			header+='</tr>';
+			let departmentDD = 'Filter Employees by  ' + makeDeptDD(dept,'Choose Department','');
+			let designationDD = makeDegnsDD(desgn,'Choose Designation','');
+			let button = '<button onclick="filters()">Filter</button>';
+			let html = departmentDD + designationDD + button + '<table class=\'table1\'>'+header+arr1.join('')+'</table1>';
+			let element = document.getElementById('employee');
+			element.innerHTML = html;
+		}
+
+		function edit(empcode){
+			let emp = employees.find(function(ele){
+				return ele.empcode==empcode;
+			});
+			console.log(emp);
+			let str = 'Employee Code :<input type="text" id="code" readOnly value=\''+emp.empcode+'\'><br/>';
+			str+= 'Name:<input type="text" id="name" value=\''+emp.name+'\'><br/>';
+			str+= 'Age:<input type="text" id="age" value=\''+emp.age+'\'><br/>';
+			str+='<span> Gender'+ makeRadios('',radio,emp.gender) + '</span>'+'<br/>';
+			str+= 'Department'+makeDeptDD(dept,emp.department,'') +'<br/>';
+			str+='Designation'+ makeDegnsDD(desgn,emp.designation,'') +'<br/>';
+			str+= 'Salary:<input type="text" id="sels" value=\''+emp.salary+'\'><br/>';
+			str+= '<button onclick=\'editEmp()\'>Edit Employee Details</button>';
+			let div = document.getElementById('employee');
+			div.innerHTML = str;
+		}
+		function sort(num){
+			if(num==0)
+				return employees.sort(sortEmpcode);
+			
+			else if(num==1)
+				return employees.sort(sortName);
+			else if(num==2)
+				return employees.sort(sortAge);
+			
+			else if(num==3)
+				return employees.sort(sortGender);
+			else if(num==4)
+				return employees.sort(sortDepartmenet);
+			else if(num==5)
+				return employees.sort(sortDesignation);
+			else if(num==6)
+				return employees.sort(sortSalary);
+			
+			showEmployees1(employees);
+		}
+		function sortEmpcode(code1,code2){
+			if(code1.empcode>code2.empcode)
+				return 1;
+			else if(code1.empcode<code2.empcode)
+				return -1;
+			else
+				return 0;
+		}
+		function sortName(emp1,emp2){
+			return emp1.name.localeCompare(emp2.name);
+		}
+		
+		function sortAge(emp1,emp2){
+			return emp1.age - emp2.age;
+		}
+		function sortGender(emp1,emp2){
+			return emp1.gender.localeCompare(emp2.gender);
+		}
+		function sortDepartmenet(emp1,emp2){
+			return emp1.department.localeCompare(emp2.department);
+		}
+		function sortDesignation(emp1,emp2){
+			return emp1.designation.localeCompare(emp2.designation);
+		}
+		function sortSalary(emp1,emp2){
+			return emp1.salary - emp2.salary;
+		}
+
+		function editEmp(){
+			let val = document.getElementById('code').value;
+			let emp = employees.find(function(ele){
+				return ele.empcode==val;
+			});
+			console.log(emp);
+			emp.empcode = document.getElementById('code').value;
+			emp.name = document.getElementById('name').value;
+			emp.age = document.getElementById('age').value;
+			emp.gender = document.getElementById('element').value;
+			emp.department = document.getElementById('dept').value;
+			emp.designation = document.getElementById('desgn').value;
+			emp.salary = document.getElementById('sels').value;
+			
+			showEmployees1(employees);
+		}
+		function makeRadios(name,arr,selectedValue){
+			const arr1 = arr.map(function(item){
+				let checkStr = '';
+				if(item==selectedValue)
+					checkStr = 'checked';
+				let s1 = '<input type="radio" id="element" name="'+name+'" value="'+item+'" '+checkStr+'>'+item;
+				return s1;
+			});
+			return arr1.join('');
+		}
+
+		function filters(){
+			let selDept = document.getElementById('dept');
+			let seldesgn = document.getElementById('desgn');
+			let farr = employees.filter(function(ele){
+				return ele.department == selDept.value;
+			});
+			let farr1 = employees.filter(function(ele){
+				return ele.designation == seldesgn.value;
+			});
+
+			let arr = farr.filter(function(ele){
+				return ele.designation == seldesgn.value;
+			});
+
+			if(seldesgn.value =='Choose Designation' && selDept.value!='Choose Department'){
+				showEmployees1(farr);
+			}else if(seldesgn.value !='Choose Designation' && selDept.value =='Choose Department'){
+				showEmployees1(farr1);
+			}else{
+				showEmployees1(arr);
+			}
+		}
+
+
+
+		function makeDeptDD(arr,firstItem,selValue){
+			let arr1 = arr.map(function(opt){
+				if(opt==selValue)
+				return '<option selected>'+opt+'</option>';
+			else
+				 return '<option>'+opt+'</option>';
+			});
+			let first = '<option disabled selected>'+firstItem+'</option>';
+			if(selValue!='')
+				first = '<option disabled>'+firstItem+'</option>';
+			let s1 = '<select id="dept">'+first + arr1.join('')+'</select>';
+			return s1; 
+		}
+		function makeDegnsDD(arr,firstItem,selValue){
+			let arr1 = arr.map(function(opt){
+				if(opt==selValue)
+				return '<option selected>'+opt+'</option>';
+			else
+				 return '<option>'+opt+'</option>';
+			});
+			let first = '<option disabled selected>'+firstItem+'</option>';
+			if(selValue!='')
+				first = '<option disabled>'+firstItem+'</option>';
+			let s1 = '<select id="desgn">'+first + arr1.join('')+'</select>';
+			return s1; 
+		}
+
+	</script>
+
+</body>
+</html>

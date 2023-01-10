@@ -1,0 +1,349 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title></title>
+	<link rel="stylesheet" href="css/sectionB.css"/>
+</head>
+<body>
+
+	<h3>Store Management System</h3>
+	<button onclick="showProducts()">Products</button>
+	<button onclick="enterOrder()">Enter An Order</button>
+	<button onclick="allOrder()">All Orders</button>
+	<div id="product"></div>
+	<script>
+		let products = [
+				{"prodcode":"PEP122","prodname":"Pepsi","price":12,"category":"Food","offer":"10%"},
+				{"prodcode":"COK238","prodname":"Coke","price":15,"category":"Food","offer":"15%"},
+				{"prodcode":"MIR411","prodname":"Mirinda","price":30,"category":"Food","offer":"20%"},
+				{"prodcode":"RB0277","prodname":"Red Bull","price":80,"category":"Food","offer":"None"},
+				{"prodcode":"LUX831","prodname":"Lux","price":10,"category":"Soap","offer":"15%"},
+				{"prodcode":"DOV672","prodname":"Dove","price":25,"category":"Soap","offer":"20%"},
+				{"prodcode":"DET810","prodname":"Dettol","price":15,"category":"Soap","offer":"None"},
+				{"prodcode":"PAN590","prodname":"Pantene","price":60,"category":"Shampoo","offer":"None"},
+				{"prodcode":"SUN677","prodname":"Sunsilk","price":48,"category":"Shampoo","offer":"15%"},
+				{"prodcode":"GAR004","prodname":"Garnier","price":75,"category":"Shampoo","offer":"10%"}];
+				
+
+
+let order = [
+{"custname":"Jack Smith","mobile":"425361434","location":"Sector 14","slot":"12PM-2PM","value":72.6,"items":[{"prodcode":"PEP122","quantity":2},{"prodcode":"COK238","quantity":4}]},
+{"custname":"Mary Gomes","mobile":"723476123","location":"Sector 22","slot":"4PM-6PM","value":130.60,"items":[{"prodcode":"SUN677","quantity":2},{"prodcode":"LUX831","quantity":4},
+{"prodcode":"DET810","quantity":1}]},{"custname":"Tim May","mobile":"835099614","location":"Pioneer	Chowk","slot":"Before 10AM","value":705,"items":[{"prodcode":"GAR004","quantity":6},{"prodcode":"RB0277","quantity":
+3},{"prodcode":"MIR411","quantity":2}]}];
+
+
+let locations = ['Sector 14A', 'Sector 15B','Sector 22', 'Pioneer Chowk'];
+
+let slot = ['Before	10AM','10AM-12PM','12PM-2PM','2PM-4PM','4PM-6PM','After	6PM'];
+
+
+let arr6 = [];
+let quantity = [1,2,3,4,5,6];
+let arr5 = [];
+let productArr = [];
+let orderArr = [];
+let storeArr = [];
+
+function allOrder(){
+	let noOfItems;
+			let arr1 = order.map(function(ele){
+				let z = [];
+				for(let i=0;i<ele.items.length;i++){
+				 z.push(ele.items[i]);
+				}
+			let farr = products.filter(function(n){
+			let farr1 = z.find(function(m){
+			return n.prodcode==m.prodcode;
+			});
+			return farr1;
+	});
+	
+	productArr.push(farr);
+	orderArr.push(z);
+			});
+			for(let i=0;i<productArr.length;i++){
+			let item = orderArr[i].reduce(function(acc,curr){
+				return acc = acc + curr.quantity;
+			},0);
+			noOfItems = item;
+			let productArr1 = productArr[i].map(function(ele){
+				let quantitys = orderArr[i].find(function(elm){
+					return elm.prodcode==ele.prodcode;
+				});
+				let net;
+
+			 let pr = ele.price * quantitys.quantity;
+			 if(ele.offer=='10%'){
+			 	net =pr - pr * 0.1;
+			 }else if(ele.offer=='15%'){
+			 	net =pr - pr * 0.15;
+			 }else if(ele.offer=='20%'){
+			 	net =pr - pr * 0.2;
+			 }else{
+			 	net = pr;
+			 }
+		
+			let str = '<tr>';
+				str+='<td class="td1">'+ele.prodcode+'</td>';
+				str+='<td class="td1">'+ele.prodname+'</td>';
+				str+='<td class="td1">'+ele.price+'</td>';
+				str+='<td class="td1">'+quantitys.quantity+'</td>';
+				str+='<td class="td1">'+ele.offer+'</td>';
+				str+='<td class="td1">'+net+'</td>';
+				str+='</tr>';
+				return str;
+			});
+	
+			let header = '<tr>';
+			header+='<th class=th1>Code</th>';
+			header+='<th class=th1>Name</th>';
+			header+='<th class=th1>Price</th>';
+			header+='<th class=th1>Quantity</th>';
+			header+='<th class=th1>Discount</th>';
+			header+='<th class=th1>Net Amount</th>';
+			header+='</tr>';
+			let info = 'Customer Name : '+order[i].custname+', Mobile : '+order[i].mobile+', Location : '+order[i].location+', Delivery Slot : '+order[i].slot+'</br>'+'Order Value : '+order[i].value+', Number of Items : '+noOfItems;
+			let html = '<table class=\'table1\'>'+info+header+productArr1.join('')+'</table1>';
+			let element = document.getElementById('product');
+			element.innerHTML+= html;
+		}
+
+	}
+
+			
+
+function orderComplete(){
+		const arr2 = arr6.map(function(ele){
+				let str;
+				str = '<tr>';
+				str+='<td class="td1">'+ele.code+'</td>';
+				str+='<td class="td1">'+ele.name+'</td>';
+				str+='<td class="td1">'+ele.price+'</td>';
+				str+='<td class="td1">'+ele.quantity+'</td>';
+				str+='<td class="td1">'+ele.discount+'</td>';
+				str+='<td class="td1">'+ele.netamount+'</td>';
+				str+='</tr>';
+				return str;
+			});
+		let a = document.getElementById('cname').value;
+		let name = 'Customer Name : '+a;
+		let b = document.getElementById('mno').value;
+		let number = 'Mobile : '+b;
+		let l = document.getElementById('pro1').value;
+		let location = 'Location : '+l;
+		let d = document.getElementById('pro2').value;
+		let slot = 'Slot : '+d;
+
+
+			let header = '<tr>';
+			header+='<th class=th1>Code</th>';
+			header+='<th class=th1>Name</th>';
+			header+='<th class=th1>Price</th>';
+			header+='<th class=th1>Quantity</th>';
+			header+='<th class=th1>Discount</th>';
+			header+='<th class=th1>Net Amount</th>';
+			header+='</tr>';
+			let html = '<table class=\'table1\'>'+name+number+location+slot+header+arr2.join('')+'</table1>';
+			let element = document.getElementById('product');
+			element.innerHTML = html;
+			
+			arr5.push(arr6);
+			arr5.push(storeArr);
+			
+			productArr.push(storeArr);
+			arr6 = [];
+	
+		}
+
+		
+
+function showProducts(){
+	showProduct1(products);
+}
+
+function showProduct1(arr){
+			const arr1 = arr.map(function(ele){
+				let str;
+				str = '<tr>';
+				str+='<td class="td1">'+ele.prodcode+'</td>';
+				str+='<td class="td1">'+ele.prodname+'</td>';
+				str+='<td class="td1">'+ele.price+'</td>';
+				str+='<td class="td1">'+ele.category+'</td>';
+				str+='<td class="td1">'+ele.offer+'</td>';
+				str+='</tr>';
+				return str;
+			});
+			let header = '<tr>';
+			header+='<th class=th1>Code</th>';
+			header+='<th class=th1>Name</th>';
+			header+='<th class=th1>Price</th>';
+			header+='<th class=th1>Category</th>';
+			header+='<th class=th1>Discount</th>';
+			header+='</tr>';
+			let html = '<table class=\'table1\'>'+header+arr1.join('')+'</table1>';
+			let element = document.getElementById('product');
+			element.innerHTML = html;
+		}
+		function cancelOrder(){
+			arr6 = [];
+			enterOrder();
+		}
+		function enterOrder(){
+			let arr1 = products.map(function(ele){
+				return ele.prodcode;
+			});
+			let str = 'Customer Name :<input type="text" id="cname"><br/><br/>';
+			str+= 'Mobile Number:<input type="text" id="mno"><br/><br/>';
+			str+='Location' + makeDD1(locations,'Choose Location','') +'<br/><br/>';
+			str+='Delivery Slot' + makeDD2(slot,'Choose Delivery Slot','') +'<br/><br/>';
+			str+='Add to Order ' + makeDD3(arr1,'Select Product','');
+			str+= makeDD4(quantity,'Select Quantity','');
+			str+= '<button onclick=\'add()\'>Add to Order</button></br>';
+			str+= '<button onclick=\'orderComplete()\'>Order Complete</button>';
+			str+= '<button onclick=\'cancelOrder()\'>Cancel Order</button>';
+
+
+			const arr2 = arr6.map(function(ele){
+				let str;
+				str = '<tr>';
+				str+='<td class="td1">'+ele.code+'</td>';
+				str+='<td class="td1">'+ele.name+'</td>';
+				str+='<td class="td1">'+ele.price+'</td>';
+				str+='<td class="td1">'+ele.quantity+'</td>';
+				str+='<td class="td1">'+ele.discount+'</td>';
+				str+='<td class="td1">'+ele.netamount+'</td>';
+				str+= '<td><button class=\'td1\' onclick=\'remove(\"'+ele.code+'")\'>Remove</button></td>';
+				str+='</tr>';
+				return str;
+			});
+
+			let header = '<tr>';
+			header+='<th class=th1>Code</th>';
+			header+='<th class=th1>Name</th>';
+			header+='<th class=th1>Price</th>';
+			header+='<th class=th1>Quantity</th>';
+			header+='<th class=th1>Discount</th>';
+			header+='<th class=th1>Net Amount</th>';
+			header+='<th class=th1></th>';
+			header+='</tr>';
+			let html = '<table class=\'table1\'>'+str+header+arr2.join('')+'</table1>';
+			let element = document.getElementById('product');
+			element.innerHTML = html;
+
+		}
+
+		function remove(code){
+			let index = arr6.findIndex(function(ele){
+				return ele.code==code;
+			});
+			arr6.splice(index,1);
+			enterOrder();
+			
+		}
+		
+		function add(){
+			let json = [{}];
+			let net;
+
+			let product1 = document.getElementById('pro3').value;
+			let qty = document.getElementById('pro4').value;
+			
+
+
+			let arr1 = products.find(function(ele){
+					return ele.prodcode==product1;
+			});
+			
+			 let pr = arr1.price * qty;
+			 if(arr1.offer=='10%'){
+			 	net =pr - pr * 0.1;
+			 }else if(arr1.offer=='15%'){
+			 	net =pr - pr * 0.15;
+			 }else if(arr1.offer=='20%'){
+			 	net =pr - pr * 0.2;
+			 }else{
+			 	net = pr;
+			 }
+
+			
+			
+			let arrz = arr6.find(function(ele){
+				return ele.code==product1;
+			});
+			if(arrz){
+			arrz.code=arrz.code;
+			arrz.name=arrz.name;
+			arrz.price=arrz.price;
+			arrz.quantity= +arrz.quantity+ +qty;
+			arrz.discount=arrz.discount;
+			arrz.netamount= +arrz.netamount+ +net;
+		}
+			else{
+			let newjson = {code:arr1.prodcode,name:arr1.prodname,price:arr1.price,quantity:qty,discount:arr1.offer,netamount:net};
+			arr6.push(newjson);
+			storeArr.push(newjson);
+		}
+			enterOrder();
+
+
+		}
+		function makeDD1(arr,firstItem,selValue){
+			let arr1 = arr.map(function(opt){
+				if(opt==selValue)
+				return '<option selected>'+opt+'</option>';
+			else
+				 return '<option>'+opt+'</option>';
+			});
+			let first = '<option disabled selected>'+firstItem+'</option>';
+			if(selValue!='')
+				first = '<option disabled>'+firstItem+'</option>';
+			let s1 = '<select id="pro1">'+first + arr1.join('')+'</select>';
+			return s1; 
+		}
+		function makeDD2(arr,firstItem,selValue){
+			let arr1 = arr.map(function(opt){
+				if(opt==selValue)
+				return '<option selected>'+opt+'</option>';
+			else
+				 return '<option>'+opt+'</option>';
+			});
+			let first = '<option disabled selected>'+firstItem+'</option>';
+			if(selValue!='')
+				first = '<option disabled>'+firstItem+'</option>';
+			let s1 = '<select id="pro2">'+first + arr1.join('')+'</select>';
+			return s1; 
+		}
+		function makeDD3(arr,firstItem,selValue){
+			let arr1 = arr.map(function(opt){
+				if(opt==selValue)
+				return '<option selected>'+opt+'</option>';
+			else
+				 return '<option>'+opt+'</option>';
+			});
+			let first = '<option disabled selected>'+firstItem+'</option>';
+			if(selValue!='')
+				first = '<option disabled>'+firstItem+'</option>';
+			let s1 = '<select id="pro3">'+first + arr1.join('')+'</select>';
+			return s1; 
+		}
+		function makeDD4(arr,firstItem,selValue){
+			let arr1 = arr.map(function(opt){
+				if(opt==selValue)
+				return '<option selected>'+opt+'</option>';
+			else
+				 return '<option>'+opt+'</option>';
+			});
+			let first = '<option disabled selected>'+firstItem+'</option>';
+			if(selValue!='')
+				first = '<option disabled>'+firstItem+'</option>';
+			let s1 = '<select id="pro4">'+first + arr1.join('')+'</select>';
+			return s1; 
+		}
+
+	</script>
+
+</body>
+</html>

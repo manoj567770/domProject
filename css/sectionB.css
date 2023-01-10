@@ -1,0 +1,29 @@
+.table1{
+	border: 1px solid black;
+	border-collapse: collapse;
+	margin-bottom: 10px;
+}
+.td1{
+	font-weight: bold;
+	background-color: lightgray;
+	border: 1px solid white;
+	text-align: center;
+}
+.td2{
+	font-weight: bold;
+	background-color: red;
+	border: 1px solid white;
+	text-align: center;
+}
+.th1{
+	background-color: darkslateblue;
+	color: white;
+	border: 1px solid white;
+	padding-left: 15px;
+	padding-right: 15px;
+}
+.editBtn{
+	margin: 2px;
+	background-color: lightgray;
+	font-weight: bold;
+}
