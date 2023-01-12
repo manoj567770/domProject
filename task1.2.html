@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title></title>
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+	<script src="https://use.fontawesome.com/releases/v5.0.8/js/all.js"></script>
+	<link href="style.css" rel="stylesheet">
+	<link rel="stylesheet" href="https://m.w3newbie.com/you-tube.css">
+	<style>
+		b {
+			color: red;
+		}
+		h4{
+			text-align: center;
+		}
+		h3{
+			text-align: center;
+		}
+		.col-sm-4{
+			border: 1px groove black;
+		}
+	</style>
+</head>
+<body>
+<div class="container">
+	<div id="show"></div>
+</div>
+
+<script>
+	
+	const products = [{product:'Pepsi',price:25,discount:'0',suppliers:'Bob Inc.',delivery:true},
+					 {product:'Dairy Milk',price:40,discount:'5',suppliers:'ABC Limited',delivery:false},
+					 {product:'Colgate',price:80,discount:'2',suppliers:'James & Co.',delivery:true},
+					 {product:'Maggie',price:15,discount:'5',suppliers:'ABC Limited',delivery:true},
+					 {product:'Snickers',price:50,discount:'2',suppliers:'James & Co.',delivery:false},
+					 {product:'Nescafe',price:10,discount:'0',suppliers:'ABC Limited',delivery:false}];
+
+	const discountOptions = [{display:'2%',value:'2'},
+								{display:'5%',value:'5'},
+								{display:'None',value:'0'}];
+
+	const suppliers = ['ABC Limited','James & Co.','Bob Inc.'];
+	let purchaseArr = [];
+
+
+		show();
+		function show(active){
+			let str = makeNavbar(active);
+			active===1 ? str+= showProducts1() : str+= '';
+			active===2 ? str+= showForm() : str+= '';
+			active===3 ? str+= changeView() : str+= '';
+			active===4 ? str+= purchase1() : str+= '';
+			active===5 ? str+= stock1() : str+= '';
+
+			document.getElementById('show').innerHTML = str;
+		}
+
+		function showProducts(){
+			show(1);
+		}
+		
+		function addProductForm(){
+			show(2);
+		}
+		function showProducts2(){
+			show(3);
+		}
+		function purchase(){
+			show(4);
+		}
+		function stock(){
+			show(5);
+		}
+		function makeNavbar(active=0){
+			let str = '<nav class="navbar navbar-expand-lg navbar-light bg-light">';
+				str+= '<a class="navbar-brand" href="#">Store System</a>';
+				str+= '<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavDropdown">';
+				str+= '<span class="navbar-toggler-icon"></span>';
+				str+= '</button>';
+				str+= '<div class="collapse navbar-collapse" id="navbarNavDropdown">';
+				str+= '<ul class="navbar-nav">';
+				let active1 = active===1 ? 'active' : '';
+				let active2 = active===2 ? 'active' : '';
+				let active3 = active===3 ? 'active' : '';
+				let active4 = active===4 ? 'active' : '';
+				let active5 = active===5 ? 'active' : '';
+				str+= '<li class="nav-item '+active1+'">'
+				str+= '<a class="nav-link" onclick="showProducts()">Show Products</a>';
+				str+= '</li>';
+				str+= '<li class="nav-item '+active2+'">';
+				str+= '<a class="nav-link" onclick="addProductForm()">Add a Product</a>';
+				str+= '</li>';
+				str+= '<li class="nav-item '+active3+'">';
+				str+= '<a class="nav-link" onclick="showProducts2()">Show Products-2</a>';
+				str+= '</li>';
+				str+= '<li class="nav-item '+active4+'">';
+				str+= '<a class="nav-link" onclick="purchase()">Purchase</a>';
+				str+= '</li>';
+				str+= '<li class="nav-item '+active5+'">';
+				str+= '<a class="nav-link" onclick="stock()">stock</a>';
+				str+= '</li>';
+				str+= '</ul>';
+				str+= '</div>';
+				str+= '</nav>';
+				return str;
+		}
+
+
+		function purchase1(){
+			let arr = products.map(function(ele){
+				return ele.product;
+			});
+			let str = '<h3>New Purchase Form</h3>';
+				str+= makeDropdown('prod',arr,'Select Product');
+				str+= makeTextField('text','Quantity','');
+				str+= '<button class="btn btn-primary" onclick="submitNewProduct()">Submit</button>';
+				return str;
+		}
+
+		function submitNewProduct(){
+			let product = document.getElementById('prod').value;
+			let quantity = document.getElementById('text').value;
+			let arr = products.find(function(ele){
+				return ele.product==product;
+			});
+
+			let json = {product:product,quantity:quantity,price:arr.price,supplier:arr.suppliers};
+			purchaseArr.push(json);
+			stock();
+		}
+
+
+		function stock1(){
+						const arr = purchaseArr.map(pr=>{
+							let {product,quantity,price,supplier} = pr;
+							let str = '<div class="row border">';
+							str+= '<div class="col-3">'+product+'</div>';
+							str+= '<div class="col-1">'+quantity+'</div>';
+							str+= '<div class="col-2">'+price+'</div>';
+							str+= '<div class="col-3">'+supplier+'</div>';
+							str+= '</div>';
+							return str;
+						});
+
+						let table = '<div class="row bg-dark text-white">';
+						 table+= '<div class="col-3" onclick="sort1(0)">Product</div>';
+						 table+= '<div class="col-1" onclick="sort1(1)">quantity</div>';
+						 table+= '<div class="col-2" onclick="sort1(2)">price</div>';
+						 table+= '<div class="col-3" onclick="sort1(3)">Supplier</div>';
+						 table+= '</div>';
+						 table+= arr.join('');
+							return table;
+					}
+
+					function sort1(colNo){
+						switch(colNo){
+							case 0 : purchaseArr.sort((p1,p2)=>p1.product.localeCompare(p2.product));break;
+							case 1 : purchaseArr.sort((p1,p2)=>(+p1.quantity)-(+p2.quantity));break;
+							case 2 : purchaseArr.sort((p1,p2)=>(+p1.price)-(+p2.price));break;
+							case 3 : purchaseArr.sort((p1,p2)=>p1.supplier.localeCompare(p2.supplier));break;
+						}
+						stock();
+					}
+
+
+
+		function changeView(){
+						const arr = products.map(pr=>{
+							let {product,price,discount,suppliers,delivery} = pr;
+							let str = '<div class="col-sm-4" style="background-color:lavender;">';
+    						str+= '<b>Product : </b>'+product+'<br/>';
+  							str+= '<b>Price : </b> '+price+'<br/>';
+  							str+= '<b>Discount : </b> '+discount+'<br/>';
+  							str+= '<b>Supplier : </b> '+suppliers+'<br/>';
+  							str+= '<b>Delivery : </b> '+delivery+'<br/>';
+   							str+= '</div>';
+   							return str;
+   						});
+							let table = '<h3>List of Products-2</h3>';
+   							table+= '<div class="row">';
+   							table+= arr.join('');
+							return table;
+					}
+
+		function showProducts1(){
+						const arr = products.map(pr=>{
+							let {product,price,discount,suppliers,delivery} = pr;
+							let str = '<div class="row border">';
+							str+= '<div class="col-3">'+product+'</div>';
+							str+= '<div class="col-1">'+price+'</div>';
+							str+= '<div class="col-2">'+discount+'</div>';
+							str+= '<div class="col-3">'+suppliers+'</div>';
+							str+= '<div class="col-2">'+delivery+'</div>';
+							str+= '</div>';
+							return str;
+						});
+
+						let table = '<div class="row bg-dark text-white">';
+						 table+= '<div class="col-3" onclick="sort(0)">Product</div>';
+						 table+= '<div class="col-1" onclick="sort(1)">Price</div>';
+						 table+= '<div class="col-2" onclick="sort(2)">Discount</div>';
+						 table+= '<div class="col-3" onclick="sort(3)">Supplier</div>';
+						 table+= '<div class="col-2" onclick="sort(4)">Delivery</div>';
+						 table+= '</div>';
+						 table+= arr.join('');
+							return table;
+					}
+
+					function sort(colNo){
+						switch(colNo){
+							case 0 : products.sort((p1,p2)=>p1.product.localeCompare(p2.product));break;
+							case 1 : products.sort((p1,p2)=>(+p1.price)-(+p2.price));break;
+							case 2 : products.sort((p1,p2)=>(+p1.discount)-(+p2.discount));break;
+							case 3 : products.sort((p1,p2)=>p1.suppliers.localeCompare(p2.suppliers));break;
+							case 4 : products.sort((p1,p2)=>p1.delivery ? 1 : -1);break;
+						}
+						showProducts();
+					}
+
+			function showForm(){
+			let str = makeTextField('prodName','Product Name','Enter the Product name');
+				str+= makeTextField('price','Price','Enter the Price');
+				str+= makeRadios(discountOptions,'Discount','discount');
+				str+= makeDropdown('supplier',suppliers,'Select Supplier');
+				str+= makeCheckbox('delivery','Delivery Available');
+				str+= '<button class="btn btn-primary" onclick="submitProduct()">Submit</button>';
+
+				return str;
+		}
+		function makeTextField(id,label,placeholder=''){
+					let str = '<div class="form-group">';
+					str+= '<label>'+label+'</label>';
+					str+= '<input type="text" class="form-control" id="'+id+'" placeholder="'+placeholder+'">';
+					str+= '</div>';
+					return str;
+		}
+
+		function submitProduct(){
+			let pname = document.getElementById('prodName').value;
+			let price = document.getElementById('price').value;
+			let supplier = document.getElementById('supplier').value;
+			let delivery = document.getElementById('delivery').checked;
+			let radios = document.getElementsByName('discount');
+			let discount = '';
+			for(let i=0;i<radios.length;i++){
+				if(radios[i].checked)
+					discount = radios[i].value;
+			}
+			let json = {product:pname,price:price,discount:discount,suppliers:supplier,delivery:delivery};
+			products.push(json);
+			show(1);
+		}
+
+		function makeRadios(arr,label,name){
+			  	let arr1 = arr.map(opt => {
+			  		let {display,value} = opt;
+			  		let str = '<div class="form-check form-check-inline">';
+			  		str+= '<input type="radio" name="'+name+'" class="form-check-input" value="'+value+'">';
+			  		str+= '<label class="form-check-label">'+display+'</label>';
+			  		str+= '</div>';
+			  		return str;
+			  	});
+
+			  	let s1 = '<div class="form-check form-check-inline">';
+				s1+= '<label class="form-check-label">'+label+'</label>';
+				s1+= '</div>';
+				s1+= arr1.join('');
+				return s1;
+			  }
+
+
+			  function makeDropdown(id,option,header){
+			  		const arr1 = option.map(opt => {
+			  			return '<option>'+opt+'</option>';
+			  		});
+
+			  		let s1 = '<div class="form-group">';
+						s1+= '<select id="'+id+'" class="form-control">';
+						s1+= '<option disabled value="" selected>'+header+'</option>';
+						s1+= arr1.join('');
+						s1+= '</select>';
+						s1+= '</div>';
+						return s1;
+			  }
+
+			  function makeCheckbox(id,label){
+			  	let str = '<div class="form-check">';
+				str+= '<input type="checkbox" class="form-check-input" id="'+id+'">';
+				str+= '<label class="form-check-label">'+label+'</label>';
+				str+= '</div>';
+				return str;
+			  }
+</script>
+
+</body>
+</html>
